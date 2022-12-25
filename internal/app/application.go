@@ -1,16 +1,17 @@
 package app
 
 import (
+	"context"
 	"fmt"
 	"github.com/Waelson/internal/controller"
+	log "github.com/Waelson/internal/log"
 	"github.com/Waelson/internal/routes"
 	"github.com/Waelson/internal/service"
 	"github.com/gin-gonic/gin"
-	"log"
 	"time"
 )
 
-type Option = func(*application)
+type Option func(*application)
 
 type Application interface {
 	Start() error
@@ -23,34 +24,43 @@ type application struct {
 	maxConnection int
 	engine        *gin.Engine
 	routes        routes.Routes
+	logger        log.Logger
 }
 
 func (a *application) Start() error {
-	log.Println("Starting server...")
-	a.initialize()
+	a.logger.Infof(context.Background(), "Starting server on port %d", a.port)
 	error := a.engine.Run(fmt.Sprintf(":%d", a.port))
 	return error
 }
 
-func (a *application) initialize() {
-	engine := gin.Default()
+func (a *application) configDependencies() {
 
+	//Services
 	clientService := service.NewClientService()
+
+	//Controllers
 	clientController := controller.NewClientController(controller.WithClientService(clientService))
 	pingController := controller.NewPingController()
 
-	routes := routes.NewRoutes(routes.WithClientController(clientController),
-		routes.WithPingController(pingController), routes.WithEngine(engine))
+	//Gin
+	a.engine = gin.New()
 
-	a.routes = routes
-	a.engine = engine
+	//Routes
+	a.routes = routes.NewRoutes(routes.WithClientController(clientController),
+		routes.WithPingController(pingController), routes.WithEngine(a.engine))
+
+	//Setting routes
+	a.routes.Config()
 }
 
+// NewApplication Create application instance
 func NewApplication(options ...Option) Application {
 	result := new(application)
+	result.logger = log.NewLogger("Application")
 	for _, opt := range options {
 		opt(result)
 	}
+	result.configDependencies()
 	return result
 }
 
@@ -72,7 +82,7 @@ func WithTimeout(timeout time.Duration) Option {
 	}
 }
 
-func WithMaxConn(maxConnection int) Option {
+func WithMaxConnection(maxConnection int) Option {
 	return func(s *application) {
 		s.maxConnection = maxConnection
 	}

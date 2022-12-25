@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Option = func(*routes)
+type Option func(*routes)
 
 type Routes interface {
-	Config(engine *gin.Engine)
+	Config()
 }
 
 type routes struct {
@@ -17,7 +17,7 @@ type routes struct {
 	clientController controller.ClientController
 }
 
-func (c *routes) Config(engine *gin.Engine) {
+func (c *routes) Config() {
 	v1 := c.engine.Group("/api/v1")
 	v1.POST("/clients", c.clientController.Save)
 	c.engine.GET("/ping", c.pingController.Handler)
