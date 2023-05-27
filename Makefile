@@ -23,13 +23,17 @@ dep-down:
 gen-sqlc:
 	sqlc generate
 
+#ex: make migrate-up seq=1
 migrate-up:
-	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose up 1
+	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose up $(seq)
 
+#ex: make migrate-down seq=1
 migrate-down:
-	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose down 1
+	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose down $(seq)
 
-migrate-author:
-	migrate create -ext sql -dir db/migrations -seq authors
+#ex: make migrate table=authors
+migrate:
+	migrate create -ext sql -dir db/migrations -seq $(table)
+
 infra-down:
 	docker compose down
