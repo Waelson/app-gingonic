@@ -13,9 +13,7 @@ import (
 const createAuthor = `-- name: CreateAuthor :execresult
 INSERT INTO authors (
     name, bio
-) VALUES (
-             ?, ?
-         )
+) VALUES (?, ?)
 `
 
 type CreateAuthorParams struct {

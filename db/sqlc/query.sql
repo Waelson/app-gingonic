@@ -9,9 +9,7 @@ ORDER BY name;
 -- name: CreateAuthor :execresult
 INSERT INTO authors (
     name, bio
-) VALUES (
-             ?, ?
-         );
+) VALUES (?, ?);
 
 -- name: DeleteAuthor :exec
 DELETE FROM authors

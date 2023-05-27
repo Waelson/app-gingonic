@@ -14,7 +14,7 @@ infra-restart:
 	docker compose restart
 
 dep-up:
-	docker run --name dev-mysql -e MYSQL_ROOT_PASSWORD=secret -d mysql
+	docker run --name dev-mysql -e MYSQL_ROOT_PASSWORD=secret -e MYSQL_DATABASE=dbauthor -e MYSQL_USER=admin -e MYSQL_PASSWORD=secret -p 3306:3306 -d mysql
 
 dep-down:
 	docker stop dev-mysql
@@ -23,5 +23,13 @@ dep-down:
 gen-sqlc:
 	sqlc generate
 
+migrate-up:
+	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose up 1
+
+migrate-down:
+	migrate -source file://./db/migrations -database "mysql://admin:secret@tcp(localhost:3306)/dbauthor" -verbose down 1
+
+migrate-author:
+	migrate create -ext sql -dir db/migrations -seq authors
 infra-down:
 	docker compose down

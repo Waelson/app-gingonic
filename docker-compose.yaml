@@ -20,6 +20,9 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: dbauthor
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: secret
     ports:
       - "3306:3306"
     networks:
