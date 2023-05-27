@@ -1,6 +1,8 @@
 package service
 
-import "github.com/Waelson/internal/model"
+import (
+	"github.com/Waelson/internal/model"
+)
 
 type ClientService interface {
 	Save(client *model.Client) (error, *model.Client)

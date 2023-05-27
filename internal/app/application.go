@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/Waelson/internal/controller"
-	log "github.com/Waelson/internal/log"
+	"github.com/Waelson/internal/log"
 	"github.com/Waelson/internal/routes"
 	"github.com/Waelson/internal/service"
 	"github.com/gin-gonic/gin"
