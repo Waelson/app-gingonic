@@ -1,0 +1,22 @@
+version: "3"
+services:
+  api:
+    image: docker.io/app-gingonic/latest
+    ports:
+      - "8080:8080"
+    container_name: api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - "3306:3306"
+    container_name: mysql
+    network_mode: "bridge"

@@ -1,0 +1,11 @@
+version: 1
+packages:
+  - path: "internal/repository"
+    name: "repository"
+    engine: "mysql"
+    schema: "db/sqlc/schema.sql"
+    queries: "db/sqlc/query.sql"
+    emit_interface: true
+    emit_empty_slices: true
+    emit_exact_table_names: true
+    emit_prepared_queries: true

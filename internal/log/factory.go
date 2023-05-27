@@ -9,7 +9,7 @@ const (
 )
 
 var (
-	InvalidLoggerError = errors.New(("Invalid logger"))
+	InvalidLoggerError = errors.New("invalid logger")
 )
 
 func NewLogger(name string) Logger {

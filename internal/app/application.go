@@ -43,7 +43,7 @@ func (a *application) configDependencies() {
 	pingController := controller.NewPingController()
 
 	//Gin
-	a.engine = gin.New()
+	a.engine = gin.Default()
 
 	//Routes
 	a.routes = routes.NewRoutes(routes.WithClientController(clientController),
